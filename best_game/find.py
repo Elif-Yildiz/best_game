@@ -9,18 +9,14 @@ if __name__ == '__main__':
     load_layer("tls")  # packet.show() -> the raw data seen there is tls layer, in order to see that load tls layers
 
     pcapFile = "/home/elifyildiz/Desktop/best_game/best_game.pcap"  # destination of pcap file
-    pcapFile2 = "/home/elifyildiz/Desktop/best_game/best_game_tls1_3.pcap"
     privateKey = "/home/elifyildiz/Desktop/best_game/server.key"  # destination of server rsa key
     keystr = open(privateKey, 'rb').read()  # to use key, reading binary
     packets = rdpcap(pcapFile)  # reading pcap file
-    packets2 = rdpcap(pcapFile2)
 
     privKeyObject = PrivKey(privateKey)  # assigning key as private key object,so I can use while sniffing
 
     res = sniff(offline=packets, session=TLSSession(server_rsa_key=privKeyObject))
     # decrypting packet's tls layers with our key
-
-    res2 = sniff(offline=packets2, session=TLSSession(server_rsa_key=privKeyObject))
 
     # from scapy terminal len(packets) -> 40 which means there are 40 packets in this pcap file
     for index, s in enumerate(res):  # showing all packets individually to analyze better
