@@ -2,3 +2,31 @@ You are in the right place my friend.
 
 Go read this: https://mpolinowski.github.io/docs/DevOps/Security/2022-09-27--wireshark-with-tls-encryption/2022-09-27/
 You wonder where the hell is the log file in this task, let me answer: It does not exist.
+
+In TLSv1.3, Perfect Forward Secrecy (PFS) is employed, which means that even if someone were to obtain the private key of the server, they wouldn't be able to decrypt past communications. This is because each session generates a unique session key that is used for encryption and decryption, and these session keys are not derived directly from the long-term key pairs (like RSA) but rather through a process of key exchange using Diffie-Hellman or similar algorithms.
+
+We only have the useless server.key and no log file that contains session keys. Sad, i tried so hard only to discover this horrible truth >:(
+
+Then you ask what the hell that private server.key file for. 
+Here:
+Authentication: The server's private key is used to digitally sign certain handshake messages during the TLS handshake process. When the client receives the server's certificate, it can verify the signature using the corresponding public key (which is contained in the certificate). This process ensures that the certificate hasn't been tampered with and that the server is who it claims to be. If the signature verification is successful, the client can trust that it's communicating with the authentic server.
+
+Basicly my view of:
+TLS 1.3:
+
+    Client Hello: The TLS handshake begins with the client sending a "Client Hello" message to the server. This message includes information about the client's supported cryptographic algorithms, versions of TLS, and other parameters.
+
+    Server Hello: Upon receiving the Client Hello, the server responds with a "Server Hello" message. This message contains the server's chosen cryptographic algorithms, the TLS version to be used for the connection, and other parameters.
+
+    Key Exchange: In TLSv1.3, key exchange occurs using a protocol called "Diffie-Hellman" (DH) or its elliptic curve variant (ECDH). This protocol allows the client and server to agree upon a shared secret without explicitly transmitting it over the network. This shared secret is used to derive the session keys.
+
+    Key Derivation: Once the shared secret is established through the key exchange protocol, both the client and server independently derive the session keys from this shared secret using a key derivation function (KDF). These session keys are used for symmetric encryption and decryption of data during the session.
+
+    Encryption and Authentication: After the session keys are derived, the handshake continues to authenticate the server (and optionally, the client) and to negotiate the parameters for encryption. Once the handshake is complete, both parties can securely exchange data using the agreed-upon encryption algorithms and session keys.
+
+The session keys are short-lived and specific to each session, providing forward secrecy. They are discarded after the session ends, making it computationally infeasible for an attacker to decrypt past sessions even if they compromise the long-term keys.
+
+More info : https://tls13.xargs.org/#open-all
+
+Thinking about calculating shared secret, I was not able to do...
+
