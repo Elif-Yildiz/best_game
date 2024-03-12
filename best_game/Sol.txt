@@ -9,6 +9,7 @@ We only have the useless server.key and no log file that contains session keys. 
 
 Then you ask what the hell that private server.key file for. 
 Here:
+
 Authentication: The server's private key is used to digitally sign certain handshake messages during the TLS handshake process. When the client receives the server's certificate, it can verify the signature using the corresponding public key (which is contained in the certificate). This process ensures that the certificate hasn't been tampered with and that the server is who it claims to be. If the signature verification is successful, the client can trust that it's communicating with the authentic server.
 
 Basicly my view of:
