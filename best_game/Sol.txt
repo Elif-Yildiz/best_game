@@ -1,4 +1,4 @@
 You are in the right place my friend.
 
 Go read this: https://mpolinowski.github.io/docs/DevOps/Security/2022-09-27--wireshark-with-tls-encryption/2022-09-27/
-You wonder where the hell is the log file in this task, let me answer: I does not exist.
+You wonder where the hell is the log file in this task, let me answer: It does not exist.
